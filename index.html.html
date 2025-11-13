@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Papa Massas & Papa Burgers - Cardápio</title>
+  <style>
+    :root{
+      --bege: #f4e9d9; /* background */
+      --marrom: #a8572b; /* accents */
+      --vermelho: #b63b2a;
+      --amarelo: #f2b705;
+      --card-bg: #fff7ee;
+      --shadow: 0 6px 18px rgba(0,0,0,0.08);
+      --radius: 14px;
+      --max-width: 1100px;
+    }
+    *{box-sizing:border-box}
+    body{font-family: 'Arial', sans-serif;background:var(--bege);color:#2b2b2b;margin:0;padding:24px;display:flex;justify-content:center}
+    .wrap{width:100%;max-width:var(--max-width)}
+
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:78px;height:78px;border-radius:12px;background:linear-gradient(135deg,var(--marrom),var(--vermelho));display:flex;align-items:center;justify-content:center;color:white;font-weight:700}
+    .brand h1{margin:0;font-size:20px;line-height:1;color:#2b2b2b}
+    .phone{display:flex;flex-direction:column;align-items:flex-end}
+    .phone a{background:var(--amarelo);padding:8px 12px;border-radius:999px;text-decoration:none;color:#2b2b2b;font-weight:700;box-shadow:var(--shadow)}
+
+    main{display:grid;grid-template-columns:1fr 360px;gap:18px}
+
+    /* Left column - menu */
+    .menu{background:linear-gradient(180deg,var(--card-bg),#fff);padding:18px;border-radius:var(--radius);box-shadow:var(--shadow)}
+    .section{margin-bottom:18px}
+    .section h2{margin:0 0 8px 0;color:var(--marrom);font-size:18px}
+    .item{display:flex;align-items:flex-start;gap:12px;padding:10px;border-radius:10px}
+    .item + .item{margin-top:6px}
+    .item .thumb{width:84px;height:64px;border-radius:8px;background:#eee;display:flex;align-items:center;justify-content:center;color:#999;font-size:12px}
+    .item .info{flex:1}
+    .item .info h3{margin:0;font-size:16px}
+    .item .info p{margin:6px 0 0 0;font-size:13px;color:#555}
+    .item .price{min-width:72px;text-align:right;font-weight:700}
+
+    /* Controls (add/remove) */
+    .controls{display:flex;gap:8px;align-items:center;margin-top:8px}
+    .btn{background:var(--vermelho);color:white;padding:8px 12px;border-radius:10px;border:0;cursor:pointer}
+    .btn.secondary{background:transparent;color:var(--vermelho);border:2px solid var(--vermelho)}
+    .btn.yellow{background:var(--amarelo);color:#2b2b2b}
+
+    /* Right column - order box */
+    .aside{position:sticky;top:24px;background:linear-gradient(180deg,#fff,var(--card-bg));padding:16px;border-radius:var(--radius);box-shadow:var(--shadow);height:max-content}
+    .order-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+    .order-list{max-height:420px;overflow:auto;margin-bottom:12px}
+    .order-line{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed #eee}
+    .small{font-size:13px;color:#666}
+    .total{font-size:20px;font-weight:800;margin-top:12px}
+
+    /* Forms for custom builds */
+    .build{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+    label{display:block;background:#fff;padding:8px;border-radius:8px;border:1px solid #f0e6dc}
+    input[type="checkbox"]{margin-right:6px}
+    .finalize{display:flex;gap:8px;margin-top:12px}
+
+    footer{margin-top:18px;display:flex;justify-content:space-between;align-items:center}
+    footer .note{color:#555}
+
+    /* Modal PIX */
+    .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.45);visibility:hidden;opacity:0;transition:opacity .18s}
+    .modal.open{visibility:visible;opacity:1}
+    .modal-card{background:#fff;padding:18px;border-radius:12px;max-width:420px;width:92%;box-shadow:var(--shadow);text-align:center}
+    .modal-card h3{margin-top:0}
+    .modal-actions{display:flex;gap:8px;justify-content:center;margin-top:12px}
+
+    /* Responsive */
+    @media (max-width:900px){main{grid-template-columns:1fr} .aside{position:static}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">PM</div>
+        <div>
+          <h1>Papa Massas & Papa Burgers</h1>
+          <div class="small">Cardápio online — finalize pelo WhatsApp</div>
+        </div>
+      </div>
+      <div class="phone">
+        <div class="small">Peça pelo WhatsApp</div>
+        <a href="https://wa.me/5521964177716" target="_blank">(21) 96417-7716</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="menu" aria-label="Menu">
+        <!-- Montar Massa -->
+        <div class="section" id="massa">
+          <h2>🍝 Monte sua Massa</h2>
+          <div class="small">450g (R$19,99) • 750g (R$29,99)</div>
+          <div style="margin-top:10px">
+            <label>Quantidade:
+              <select id="massa-qt" style="margin-left:8px;padding:6px;border-radius:6px">
+                <option value="1">1 (450g)</option>
+                <option value="1.5">Aumentar para 750g (+R$9,90)</option>
+              </select>
+            </label>
+          </div>
+
+          <div style="margin-top:10px">
+            <strong>Escolha a massa:</strong>
+            <div class="build" style="margin-top:8px">
+              <label><input type="radio" name="massaTipo" value="Espaguete" checked>Espaguete</label>
+              <label><input type="radio" name="massaTipo" value="Penne">Penne</label>
+              <label><input type="radio" name="massaTipo" value="Parafuso">Parafuso</label>
+            </div>
+          </div>
+
+          <div style="margin-top:10px">
+            <strong>Escolha o molho:</strong>
+            <div class="build" style="margin-top:8px">
+              <label><input type="radio" name="molho" value="Molho branco" checked>Molho branco</label>
+              <label><input type="radio" name="molho" value="Molho rosé">Molho rosé</label>
+              <label><input type="radio" name="molho" value="Molho vermelho">Molho vermelho</label>
+              <label><input type="radio" name="molho" value="Alho e óleo">Alho e óleo</label>
+            </div>
+          </div>
+
+          <div style="margin-top:10px">
+            <strong>Escolha até 5 ingredientes:</strong>
+            <div class="build" id="massa-ingredientes" style="margin-top:8px">
+              <!-- ingredientes list -->
+            </div>
+          </div>
+
+          <div style="margin-top:10px">
+            <strong>Escolha até 3 finalizações:</strong>
+            <div class="build" id="massa-finalizacoes" style="margin-top:8px">
+              <!-- finalizacoes -->
+            </div>
+          </div>
+
+          <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
+            <button class="btn" onclick="addMassa()">Adicionar Massa</button>
+            <div class="small">Preço base: R$19,99</div>
+          </div>
+        </div>
+
+        <!-- Batata Cremosa -->
+        <div class="section" id="batata">
+          <h2>🥔 Monte sua Batata Cremosa</h2>
+          <div class="small">R$19,99 (PIX) • Opções de recheio</div>
+
+          <div style="margin-top:8px">
+            <strong>Escolha seu recheio:</strong>
+            <div class="build" style="margin-top:8px">
+              <label><input type="radio" name="batRecheio" value="Strogonoff de Carne" checked>Strogonoff de Carne</label>
+              <label><input type="radio" name="batRecheio" value="Strogonoff de Frango">Strogonoff de Frango</label>
+            </div>
+          </div>
+
+          <div style="margin-top:10px">
+            <strong>Escolha até 4 complementos:</strong>
+            <div class="build" id="bat-complementos" style="margin-top:8px"></div>
+          </div>
+
+          <div style="margin-top:10px">
+            <strong>Escolha até 4 finalizações:</strong>
+            <div class="build" id="bat-finalizacoes" style="margin-top:8px"></div>
+          </div>
+
+          <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
+            <button class="btn" onclick="addBatata()">Adicionar Batata</button>
+            <div class="small">Preço base: R$19,99</div>
+          </div>
+        </div>
+
+        <!-- Burgers list (sem imagens) -->
+        <div class="section" id="burgers">
+          <h2>🍔 Papa Burgers</h2>
+          <div class="item">
+            <div class="info"><h3>X-Burger</h3><p>Pão, carne, queijo, ketchup, maionese, mostarda</p></div>
+            <div class="price">R$8,99</div>
+            <div style="margin-left:12px"><button class="btn yellow" onclick="addProduct('X-Burger',8.99)">Adicionar</button></div>
+          </div>
+          <div class="item">
+            <div class="info"><h3>X-Egg</h3><p>Pão, carne, queijo, ovo, salada</p></div>
+            <div class="price">R$9,99</div>
+            <div style="margin-left:12px"><button class="btn yellow" onclick="addProduct('X-Egg',9.99)">Adicionar</button></div>
+          </div>
+          <div class="item">
+            <div class="info"><h3>X-Burger Duplo</h3><p>Duas carnes, duas fatias de queijo</p></div>
+            <div class="price">R$12,99</div>
+            <div style="margin-left:12px"><button class="btn yellow" onclick="addProduct('X-Burger Duplo',12.99)">Adicionar</button></div>
+          </div>
+          <div class="item">
+            <div class="info"><h3>X-Calabresa</h3><p>Pão, carne, calabresa fatiada, salada</p></div>
+            <div class="price">R$14,99</div>
+            <div style="margin-left:12px"><button class="btn yellow" onclick="addProduct('X-Calabresa',14.99)">Adicionar</button></div>
+          </div>
+          <div class="item">
+            <div class="info"><h3>X-Cheddar Melt</h3><p>Cheddar cremoso, bacon crocante</p></div>
+            <div class="price">R$15,99</div>
+            <div style="margin-left:12px"><button class="btn yellow" onclick="addProduct('X-Cheddar Melt',15.99)">Adicionar</button></div>
+          </div>
+          <div class="item">
+            <div class="info"><h3>X-Bacon</h3><p>Bacon crocante, salada</p></div>
+            <div class="price">R$15,99</div>
+            <div style="margin-left:12px"><button class="btn yellow" onclick="addProduct('X-Bacon',15.99)">Adicionar</button></div>
+          </div>
+          <div class="item">
+            <div class="info"><h3>X-Tudo</h3><p>Muito recheio: bacon, ovo, calabresa, etc.</p></div>
+            <div class="price">R$19,99</div>
+            <div style="margin-left:12px"><button class="btn yellow" onclick="addProduct('X-Tudo',19.99)">Adicionar</button></div>
+          </div>
+          <div class="item">
+            <div class="info"><h3>X-Frangão</h3><p>Hambúrguer de frango empanado, presunto, bacon</p></div>
+            <div class="price">R$21,99</div>
+            <div style="margin-left:12px"><button class="btn yellow" onclick="addProduct('X-Frangão',21.99)">Adicionar</button></div>
+          </div>
+        </div>
+
+        <!-- Cachorro, Batatas e Bebidas quick-add -->
+        <div class="section">
+          <h2>🌭 Cachorro-quente / 🍟 Batatas / 🥤 Bebidas</h2>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn" onclick="addProduct('Salsicha',12.99)">Salsicha R$12,99</button>
+            <button class="btn" onclick="addProduct('Linguiça',15.99)">Linguiça R$15,99</button>
+            <button class="btn" onclick="addProduct('Batata Simples P',8.99)">Batata P R$8,99</button>
+            <button class="btn" onclick="addProduct('Batata Simples M',14.99)">Batata M R$14,99</button>
+            <button class="btn" onclick="addProduct('Coca-Cola 1.5L',12.99)">Coca 1,5L R$12,99</button>
+          </div>
+        </div>
+
+      </section>
+
+      <aside class="aside">
+        <div class="order-title">
+          <div><strong>Seu Pedido</strong></div>
+          <div class="small">Recebemos pelo WhatsApp</div>
+        </div>
+        <div class="order-list" id="orderList">
+          <div class="small">Nenhum item adicionado</div>
+        </div>
+
+        <div class="total" id="total">Total: R$0,00</div>
+
+        <div style="margin-top:12px">
+          <label>Nome do cliente (opcional):<input id="cliente" placeholder="Seu nome" style="width:100%;padding:8px;margin-top:6px;border-radius:8px;border:1px solid #efe3d4"></label>
+        </div>
+
+        <div style="margin-top:10px;display:flex;gap:8px;flex-direction:column">
+          <button class="btn yellow" id="pixBtn" onclick="openPixModal()">Pagar via PIX</button>
+          <button class="btn" style="width:100%" id="finalizeBtn" onclick="finalizeOrder()">Finalizar pedido e abrir WhatsApp</button>
+        </div>
+
+        <div style="margin-top:10px" class="small">Pagamento: PIX (copiar chave ou QR)</div>
+        <div style="margin-top:8px;display:flex;gap:8px;justify-content:space-between;align-items:center">
+          <a href="https://wa.me/5521964177716" target="_blank" class="btn secondary">Abrir WhatsApp</a>
+          <div class="small">iFood • Retirada na loja</div>
+        </div>
+      </aside>
+
+    </main>
+
+    <footer>
+      <div class="note">Valores para retirada em loja • Pagamento via PIX</div>
+      <div class="note">Desenvolvido: template gerado automaticamente</div>
+    </footer>
+  </div>
+
+  <!-- PIX Modal -->
+  <div class="modal" id="pixModal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h3>Pagar via PIX</h3>
+      <p>Escolha uma opção:</p>
+      <div class="modal-actions">
+        <button class="btn yellow" onclick="generatePixQr()">Gerar QR Code</button>
+        <button class="btn" onclick="copyPixKey()">Copiar chave PIX</button>
+      </div>
+      <div id="pixQrArea" style="margin-top:12px"></div>
+      <div style="margin-top:10px;text-align:center"><button class="btn secondary" onclick="closePixModal()">Fechar</button></div>
+    </div>
+  </div>
+
+  <script>
+    /* Data lists from the cardapio */
+    const massaIngredientes = [
+      'Creme de Cheddar','Requeijão Catupiry','Mussarela Ralada','Presunto picado','Bacon picado','Carne moída','Frango desfiado','Calabresa picada','Cebola roxa','Cebola branca','Tomate cereja','Brócolis','Ervilha','Milho','Azeitona','Ovo de codorna','Uva passa'
+    ];
+    const massaFinalizacoes = ['Mussarela Ralada','Orégano','Alho torrado'];
+
+    const batComplementos = ['Calabresa','Bacon','Cheddar','Catupiry'];
+    const batFinalizacoes = ['Queijo Mussarela','Alho Torrado','Orégano','Batata Palha'];
+
+    // render checkboxes
+    function renderCheckboxes(id, arr){
+      const el = document.getElementById(id);
+      arr.forEach(v => {
+        const label = document.createElement('label');
+        label.innerHTML = `<input type=\"checkbox\" value=\"${v}\">${v}`;
+        el.appendChild(label);
+      });
+    }
+    renderCheckboxes('massa-ingredientes', massaIngredientes);
+    renderCheckboxes('massa-finalizacoes', massaFinalizacoes);
+    renderCheckboxes('bat-complementos', batComplementos);
+    renderCheckboxes('bat-finalizacoes', batFinalizacoes);
+
+    // order state
+    let order = [];
+    const DELIVERY_FEE = 3.00; // taxa de entrega
+
+    function formatMoney(v){
+      return 'R$' + v.toFixed(2).replace('.',',');
+    }
+
+    function updateOrderUI(){
+      const list = document.getElementById('orderList');
+      list.innerHTML = '';
+      if(order.length===0){ list.innerHTML = '<div class="small">Nenhum item adicionado</div>'; document.getElementById('total').innerText = 'Total: R$0,00'; return; }
+      let subtotal = 0;
+      order.forEach((it, idx) => {
+        subtotal += it.price;
+        const line = document.createElement('div');
+        line.className = 'order-line';
+        line.innerHTML = `<div><strong>${it.name}</strong><div class="small">${it.desc || ''}</div></div><div style="text-align:right"><div>${formatMoney(it.price)}</div><div style="margin-top:6px"><button class=\"btn secondary\" onclick=\"removeItem(${idx})\">Remover</button></div></div>`;
+        list.appendChild(line);
+      });
+      const total = subtotal + DELIVERY_FEE;
+      document.getElementById('total').innerText = `Subtotal: ${formatMoney(subtotal)} • Taxa entrega: ${formatMoney(DELIVERY_FEE)} • Total: ${formatMoney(total)}`;
+    }
+
+    function addProduct(name, price){
+      order.push({name, price: Number(price), desc: ''});
+      updateOrderUI();
+    }
+
+    function removeItem(i){ order.splice(i,1); updateOrderUI(); }
+
+    // Add massa complex
+    function addMassa(){
+      const massaTipo = document.querySelector('input[name="massaTipo"]:checked').value;
+      const molho = document.querySelector('input[name="molho"]:checked').value;
+      const qt = document.getElementById('massa-qt').value; // 1 or 1.5
+      const ingredientes = Array.from(document.querySelectorAll('#massa-ingredientes input:checked')).map(i=>i.value).slice(0,5);
+      const finalizacoes = Array.from(document.querySelectorAll('#massa-finalizacoes input:checked')).map(i=>i.value).slice(0,3);
+      const base = 19.99;
+      const extra = (qt==='1.5')?9.90:0;
+      const price = base + extra;
+      const name = `Massa - ${massaTipo}`;
+      const desc = `Molho: ${molho} • Ingredientes: ${ingredientes.join(', ') || 'nenhum'} • Finalizações: ${finalizacoes.join(', ') || 'nenhuma'}`;
+      order.push({name, price: Number(price.toFixed(2)), desc});
+      updateOrderUI();
+    }
+
+    function addBatata(){
+      const recheio = document.querySelector('input[name="batRecheio"]:checked').value;
+      const comps = Array.from(document.querySelectorAll('#bat-complementos input:checked')).map(i=>i.value).slice(0,4);
+      const fins = Array.from(document.querySelectorAll('#bat-finalizacoes input:checked')).map(i=>i.value).slice(0,4);
+      const price = 19.99;
+      const name = `Batata - ${recheio}`;
+      const desc = `Complementos: ${comps.join(', ') || 'nenhum'} • Finalizações: ${fins.join(', ') || 'nenhuma'}`;
+      order.push({name, price, desc});
+      updateOrderUI();
+    }
+
+    function finalizeOrder(){
+      if(order.length===0){ alert('Adicione ao menos 1 item ao pedido.'); return; }
+      const cliente = document.getElementById('cliente').value.trim();
+      let subtotal = order.reduce((s,i)=>s+i.price,0);
+      let total = subtotal + DELIVERY_FEE;
+      let msg = `Ol%C3%A1!%20Gostaria%20de%20fazer%20meu%20pedido%20%F0%9F%8D%94%F0%9F%8D%9D%3A%0A`;
+      if(cliente) msg += `Nome%3A%20${encodeURIComponent(cliente)}%0A`;
+      order.forEach((it,idx)=>{
+        const line = `${idx+1}) ${it.name} - ${it.desc} - ${formatMoney(it.price)}`;
+        msg += encodeURIComponent(line) + '%0A';
+      });
+      msg += `%0ATaxa%20de%20entrega%3A%20${encodeURIComponent(formatMoney(DELIVERY_FEE))}`;
+      msg += `%0ATotal%20aproximado%3A%20${encodeURIComponent(formatMoney(total))}`;
+
+      const wa = `https://wa.me/5521964177716?text=${msg}`;
+      window.open(wa, '_blank');
+    }
+
+    // PIX modal functions
+    const PIX_KEY = '+5521964177716'; // chave PIX (sem espaços pro QR code)
+    function openPixModal(){ document.getElementById('pixModal').classList.add('open'); }
+    function closePixModal(){ document.getElementById('pixModal').classList.remove('open'); document.getElementById('pixQrArea').innerHTML=''; }
+
+    function generatePixQr(){
+      // gerar payload simples com chave aberta (texto explicativo) — para QR real com valor fixo seria necessária integração com PSP
+      const pixDisplayKey = '+55 21 96417-7716';
+      const info = `PIX - Chave: ${pixDisplayKey}`;
+      // usar API de QR local: vamos criar um QR com o texto da chave e total
+      const subtotal = order.reduce((s,i)=>s+i.price,0);
+      const total = (subtotal + DELIVERY_FEE).toFixed(2);
+      const qrText = `chave:${pixDisplayKey};valor:${total}`;
+
+      // criar QR usando canvas via biblioteca simples (draw manual)
+      // para compatibilidade sem CDN, vamos construir URL de API do chart.googleapis (fallback) - mas offline pode falhar
+      document.getElementById('pixQrArea').innerHTML = '';
+      const canvas = document.createElement('canvas');
+      canvas.width = 220; canvas.height = 220;
+      document.getElementById('pixQrArea').appendChild(canvas);
+      try{
+        // tentar usar QRious se disponível
+        if(window.QRious){
+          new QRious({element: canvas, value: qrText, size:220});
+        } else {
+          // desenhar texto simples caso não haja geração
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#fff'; ctx.fillRect(0,0,220,220);
+          ctx.fillStyle = '#000'; ctx.font = '14px Arial'; ctx.fillText('PIX QR',90,100);
+          ctx.fillText(pixDisplayKey,20,130);
+          ctx.fillText('Valor: R$' + total,50,160);
+        }
+      }catch(e){
+        const p = document.createElement('p'); p.textContent = 'Erro ao gerar QR.'; document.getElementById('pixQrArea').appendChild(p);
+      }
+      const note = document.createElement('p'); note.className='small'; note.style.marginTop='8px'; note.textContent = `Chave: ${pixDisplayKey} • Valor sugerido: R$${total}`;
+      document.getElementById('pixQrArea').appendChild(note);
+    }
+
+    function copyPixKey(){
+      const pixDisplayKey = '+55 21 96417-7716';
+      navigator.clipboard.writeText(pixDisplayKey).then(()=>{
+        alert('Chave PIX copiada: ' + pixDisplayKey);
+      }).catch(()=>{ alert('Não foi possível copiar automaticamente. Copie manualmente: ' + pixDisplayKey); });
+    }
+
+    // initial render
+    updateOrderUI();
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+</body>
+</html>
